@@ -12,18 +12,26 @@ vignette: >
 data("iris")
 data("faithful")
 ```
-## Package
+## Ridge Regression
 The Package `lab7` includes a function called `ridgreg` with which it is possible to do a ridge regression on data.
-$\hat \beta^{ridge}=(X´X+ \lambda I)^{-1} X´y$
+$\hat \beta^{ridge}=(X´X+ \lambda I)^{-1} X´y$ 
+## Example
 The use of the function is as can be seen below:
 ```{r}
 library(lab7)
 result<-ridgereg(eruptions~waiting,faithful)
 result
 ```
+## Further features
+The function `predict` can be used to extract all predicted values.
 ```{r}
 head(predict(result))
 ```
+The function `coef` extracts all coefficients.
 ```{r}
 coef(result)
+```
+And the function `print` prints both the formula used and the coefficients.
+```{r}
+print(result)
 ```
