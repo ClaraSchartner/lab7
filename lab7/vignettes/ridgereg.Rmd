@@ -1,0 +1,29 @@
+---
+title: "Ridge Regression"
+author: "Clara Schartner and Araya Eamrurksiri"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r, echo=FALSE}
+data("iris")
+data("faithful")
+```
+## Package
+The Package `lab7` includes a function called `ridgreg` with which it is possible to do a ridge regression on data.
+$\hat \beta^{ridge}=(X´X+ \lambda I)^{-1} X´y$
+The use of the function is as can be seen below:
+```{r}
+library(lab7)
+result<-ridgereg(eruptions~waiting,faithful)
+result
+```
+```{r}
+head(predict(result))
+```
+```{r}
+coef(result)
+```
