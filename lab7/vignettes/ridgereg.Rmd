@@ -41,6 +41,17 @@ print(result)
 library(mlbench)
 library(caret)
 data("BostonHousing")
-train<-createDataPartition(BostonHousing, p=0.75)
+intrain<-createDataPartition(BostonHousing$crim, p=0.75, list=FALSE)
+training<-BostonHousing[intrain,]
+testing<-BostonHousing
+
+lm.s<-train(crim ~ .,data = training, method = "lm")
+fore<-train(crim ~ .,data = training, method = "leapForward")
+pre.fore<-predict(newdata=training, fore)
+confusionMatrix(pre.fore, training$crim)
+
+ #10foldcross <- trainControl(method = "repeatedcv", repeats=1)
+
+             
 ```
 
