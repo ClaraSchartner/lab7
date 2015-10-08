@@ -1,0 +1,15 @@
+Package: lab7
+Type: Package
+Title: ridge and delay
+Version: 1.0
+Date: 2015-10-08
+Author: Clara Schartner and Araya Eamrurksiri
+Maintainer: Clara Schartner <Clara.schartner@gmail.com>
+Description: Calculate the linear regression and ridge regression. and visualises delays
+License: GPL-3
+LazyData: true
+Imports: ggplot2
+Suggests: testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
