@@ -35,3 +35,12 @@ And the function `print` prints both the formula used and the coefficients.
 ```{r}
 print(result)
 ```
+
+##Predictive
+```{r}
+library(mlbench)
+library(caret)
+data("BostonHousing")
+train<-createDataPartition(BostonHousing, p=0.75)
+```
+
