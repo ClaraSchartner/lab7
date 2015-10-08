@@ -47,8 +47,14 @@ testing<-BostonHousing
 
 lm.s<-train(crim ~ .,data = training, method = "lm")
 fore<-train(crim ~ .,data = training, method = "leapForward")
-pre.fore<-predict(newdata=training, fore)
-confusionMatrix(pre.fore, training$crim)
+
+pre.fore<-predict(newdata=testing, fore)
+confusionMatrix(data=pre.fore, testing$crim) #not working!! maybe because metric?
+ plot(testing$crim,col="red")
+ lines(pre.fore)
+ 
+pre.lm<-predict(newdata=testing, lm.s)
+confusionMatrix(data=pre.lm, testing$crim)
 
  #10foldcross <- trainControl(method = "repeatedcv", repeats=1)
 
