@@ -43,20 +43,53 @@ library(caret)
 data("BostonHousing")
 intrain<-createDataPartition(BostonHousing$crim, p=0.75, list=FALSE)
 training<-BostonHousing[intrain,]
-testing<-BostonHousing[-intrain,] #i think it should be like this
- 
+testing<-BostonHousing[-intrain,]
+#testing2 <- train(crim~.,data=testing)
+
+#fit a linear regression model 
 lm.s<-train(crim ~ .,data = training, method = "lm")
-fore<-train(crim ~ .,data = training, method = "leapForward")
+
+#fit a linear regression model with forward selection
+lm.fore<-train(crim ~ .,data = training, method = "leapForward")
  
-pre.fore<-predict(newdata=testing, fore)
-# confusionMatrix(data=pre.fore, testing$crim) #not working!! maybe because metric?
-plot(testing$crim,col="red")
-lines(pre.fore)
-  
+#evaluate performance of linear regression model on training dataset
+pre.lm.train <- predict(lm.s)
+
+#evaluate performance of linear regression model on test dataset
 pre.lm<-predict(newdata=testing, lm.s)
 confusionMatrix(data=pre.lm, testing$crim)
+
+#evaluate performance of linear regression model with forward selection on test dataset
+pre.fore<-predict(newdata=testing, lm.fore)
+# confusionMatrix(data=pre.fore, testing$crim) #not working!! maybe because metric?
+plot(testing$crim,col="red",type="l")
+lines(pre.fore)
+
  
-#10foldcross <- trainControl(method = "repeatedcv", repeats=1)
+tenfoldcross <- trainControl(method = "repeatedcv", repeats=10)
+
+#tried to include custom models in caret -- not working yet
+ridgereg <- list(type=c("Classification","Regression"), library="lab7", loop=NULL)
+
+#the parameter element
+prm <- data.frame(parameter=c("formula","data","lamdba"),class=c("formula","data.frame","numeric"))
+ridge$parameters <- prm
+
+#the grid element
+ridge.grid <- function(x,y, len=NULL){
+    library(lab7)
+    
+}
+ridgereg$grid <- ridge.grid
+
+#the fit element
+ridge.fit <- function(x, y, wts, param, lev, last, weights, classProbs, ...){
+    ridgereg(x=x, y=y)
+}
+ridgereg$fit <- ridge.fit
+
+#fit a ridge regresstion 
+ridge.train <- train(crim~., data=training, method=ridgereg, trControl = tenfoldcross)
               
 ```
 
