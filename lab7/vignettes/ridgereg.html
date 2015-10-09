@@ -58,9 +58,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </div>
 
 
-<div id="package" class="section level2">
-<h2>Package</h2>
-<p>The Package <code>lab7</code> includes a function called <code>ridgreg</code> with which it is possible to do a ridge regression on data. <span class="math">\(\hat \beta^{ridge}=(X´X+ \lambda I)^{-1} X´y\)</span></p>
+<div id="ridge-regression" class="section level2">
+<h2>Ridge Regression</h2>
+<p>The Package <code>lab7</code> includes a function called <code>ridgreg</code> with which it is possible to do a ridge regression on data. <span class="math">\(\hat \beta^{ridge}=(X´X+ \lambda I)^{-1} X´y\)</span> ## Example The use of the function is as can be seen below:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lab7)
 result&lt;-<span class="kw">ridgereg</span>(eruptions~waiting,faithful)
 result</code></pre>
@@ -70,11 +70,48 @@ result</code></pre>
 ## Coefficients:
 ## (Intercept)     waiting 
 ##   0.0000000   0.0756278</code></pre>
+</div>
+<div id="further-features" class="section level2">
+<h2>Further features</h2>
+<p>The function <code>predict</code> can be used to extract all predicted values.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">predict</span>(result))</code></pre>
 <pre><code>## [1] 5.974596 4.083901 5.596457 4.688923 6.428363 4.159529</code></pre>
+<p>The function <code>coef</code> extracts all coefficients.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(result)</code></pre>
 <pre><code>## (Intercept)     waiting 
 ##   0.0000000   0.0756278</code></pre>
+<p>And the function <code>print</code> prints both the formula used and the coefficients.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(result)</code></pre>
+<pre><code>## Call:
+## ridgereg(formula = eruptions ~ waiting, data = faithful)
+## 
+## Coefficients:
+## (Intercept)     waiting 
+##   0.0000000   0.0756278</code></pre>
+</div>
+<div id="predictive" class="section level2">
+<h2>Predictive</h2>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># library(mlbench)</span>
+<span class="co"># library(caret)</span>
+<span class="co"># data(&quot;BostonHousing&quot;)</span>
+<span class="co"># intrain&lt;-createDataPartition(BostonHousing$crim, p=0.75, list=FALSE)</span>
+<span class="co"># training&lt;-BostonHousing[intrain,]</span>
+<span class="co"># testing&lt;-BostonHousing</span>
+<span class="co"># </span>
+<span class="co"># lm.s&lt;-train(crim ~ .,data = training, method = &quot;lm&quot;)</span>
+<span class="co"># fore&lt;-train(crim ~ .,data = training, method = &quot;leapForward&quot;)</span>
+<span class="co"># </span>
+<span class="co"># pre.fore&lt;-predict(newdata=testing, fore)</span>
+<span class="co"># confusionMatrix(data=pre.fore, testing$crim) #not working!! maybe because metric?</span>
+<span class="co">#  plot(testing$crim,col=&quot;red&quot;)</span>
+<span class="co">#  lines(pre.fore)</span>
+<span class="co">#  </span>
+<span class="co"># pre.lm&lt;-predict(newdata=testing, lm.s)</span>
+<span class="co"># confusionMatrix(data=pre.lm, testing$crim)</span>
+<span class="co"># </span>
+<span class="co">#  #10foldcross &lt;- trainControl(method = &quot;repeatedcv&quot;, repeats=1)</span>
+<span class="co"># </span>
+<span class="co">#              </span></code></pre>
 </div>
 
 
