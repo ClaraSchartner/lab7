@@ -63,7 +63,7 @@ pre.fore<-predict(newdata=testing, lm.fore)
 
  
 #evaluate performance of linear regression model on training dataset
-pre.lm.train <- predict(lm.s)
+pre.lm.train <- predict(lm.s, newdata=training)
 
 #evaluate performance of linear regression model on test dataset
 pre.lm<-predict(newdata=testing, lm.s)
@@ -75,7 +75,7 @@ plot(testing$crim,col="red")
  
  #10foldcross <- trainControl(method = "repeatedcv", repeats=1)
 
-confusionMatrix(data=pre.lm, testing$crim)
+# confusionMatrix(data=pre.lm, testing$crim)
 
 #evaluate performance of linear regression model with forward selection on test dataset
 pre.fore<-predict(newdata=testing, lm.fore)
@@ -91,6 +91,8 @@ ridgereg <- list(type=c("Classification","Regression"), library="lab7", loop=NUL
 
 #the parameter element
 prm <- data.frame(parameter=c("formula","data","lamdba"),class=c("formula","data.frame","numeric"))
+
+ridge<-NULL #Not sure, if you wanted this, but ridge has to be defined somewere
 ridge$parameters <- prm
 
 #the grid element
