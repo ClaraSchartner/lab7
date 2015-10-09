@@ -52,13 +52,14 @@ testing<-BostonHousing[-intrain,]
 lm.s<-train(crim ~ .,data = training, method = "lm")
 
 
-pre.fore<-predict(newdata=testing, fore)
+#fit a linear regression model with forward selection
+lm.fore<-train(crim ~ .,data = training, method = "leapForward")
+
+pre.fore<-predict(newdata=testing, lm.fore)
 #confusionMatrix(data=pre.fore, testing$crim) #not working!! maybe because metric?
  plot(testing$crim,col="red")
  lines(pre.fore)
 
-#fit a linear regression model with forward selection
-lm.fore<-train(crim ~ .,data = training, method = "leapForward")
 
  
 #evaluate performance of linear regression model on training dataset
