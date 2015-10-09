@@ -43,21 +43,20 @@ library(caret)
 data("BostonHousing")
 intrain<-createDataPartition(BostonHousing$crim, p=0.75, list=FALSE)
 training<-BostonHousing[intrain,]
-testing<-BostonHousing
-
+testing<-BostonHousing[-intrain,] #i think it should be like this
+ 
 lm.s<-train(crim ~ .,data = training, method = "lm")
 fore<-train(crim ~ .,data = training, method = "leapForward")
-
-pre.fore<-predict(newdata=testing, fore)
-confusionMatrix(data=pre.fore, testing$crim) #not working!! maybe because metric?
- plot(testing$crim,col="red")
- lines(pre.fore)
  
+pre.fore<-predict(newdata=testing, fore)
+# confusionMatrix(data=pre.fore, testing$crim) #not working!! maybe because metric?
+plot(testing$crim,col="red")
+lines(pre.fore)
+  
 pre.lm<-predict(newdata=testing, lm.s)
 confusionMatrix(data=pre.lm, testing$crim)
-
- #10foldcross <- trainControl(method = "repeatedcv", repeats=1)
-
-             
+ 
+#10foldcross <- trainControl(method = "repeatedcv", repeats=1)
+              
 ```
 
