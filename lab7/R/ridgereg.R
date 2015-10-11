@@ -18,7 +18,7 @@
 #'ridereg(eruptions~waiting, data=faithful)
 #'
 
-ridgereg <- function(formula, data, lambda=0.1){
+ridgereg <- function(formula, data, lambda=0.1){ #later try to find best lambda!! just temporary solution!
     X <- model.matrix(formula, data)
     y <- as.matrix(data[all.vars(formula)[!(all.vars(formula) %in% colnames(X))]])
     stopifnot(is.numeric(y)&is.numeric(X))
