@@ -20,3 +20,9 @@ temp<-dim(ab)[1]
 temp1<-c(1:temp) %in%  ind  #checking if index in to get TRUE FALSE and put them into filter #optimize
 training<-filter(ab, temp1)
 valtest<-filter(ab, !temp1)
+
+
+#
+ridgereg(ab$arr_delay~., ab)
+r<-ridgereg(arr_delay~dep_time+distance+air_time+temp+dewp+humid+wind_speed+pressure, ab)
+coef(r)
