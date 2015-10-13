@@ -18,11 +18,11 @@
 #'ridereg(eruptions~waiting, data=faithful)
 #'
 
-ridgereg1 <- function(y, x, lambda=0.1){ #later try to find best lambda!! just temporary solution!
+ridgereg1 <- function(y, x, lambda=0.1){ 
    # X <- model.matrix(formula, data)
     #y <- as.matrix(data[all.vars(formula)[!(all.vars(formula) %in% colnames(X))]])
    # stopifnot(is.numeric(y)&is.numeric(X))
-     library(som)
+    # library(som)
   # xnorm<- normalize(X, byrow=TRUE)
    # xnorm <- as.matrix(t(t(X)-apply(X,2,mean)))#/diag(var(X)) #how do you think we have to devide my variance?
   # xmean<-as.matrix(t(t(X)-apply(X,2,mean)))
