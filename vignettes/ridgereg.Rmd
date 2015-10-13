@@ -115,7 +115,7 @@ ridge$grid <- function(y,x, len=NULL, search="grid"){
 #the fit element
 Fit <- function(y, x, lambda, param, lev, last, classProbs, ...){
   #library(lab7)
-   lab7::ridgereg1(y=y, x=x, lambda=param$lambda) 
+   ridgereg1(y=y, x=x, lambda=param$lambda) 
 }
 
 ridge$fit <- Fit
