@@ -92,6 +92,8 @@ tenfoldcross <- trainControl(method = "repeatedcv", repeats=10)
 
 
 
+
+
 #include custom method "ridge" #changed the name 
 ridge <- list(type=c("Regression"), 
                  library="lab7",
@@ -104,8 +106,8 @@ ridge$parameters <- data.frame(parameter="lambda",
 
 
 #the grid element
-ridge$grid <- function(x,y, len=NULL){
-   data.frame(lambda=c(0,1,3,10))
+ridge$grid <- function(x,y, len=NULL, search="grid"){
+   data.frame(lambda=c(1,3,10,11,15,30))
     
 }
 #ridge$grid <- ridge.grid
@@ -122,12 +124,15 @@ ridge$predict<-function(modelFit, newdata,preProc=NULL, submodels=NULL){
   predict(modelFit, newdata)
 }
 
+
+ridge$sort<-function (x) x[order(-x$lambda), ]
+ridge$label<-"Ridge"
 fitControl <- trainControl(
   method = "repeatedcv",
-  number = 2,
+  number = 1,
   repeats = 1)
 #fit a ridge regresstion 
-ridge.train <- train(training$crim, training[,-1], method=ridge, trControl = fitControl)
+ridge.train <- train(y=training$crim, x=training[,-1], method=ridge, trControl = fitControl)
               
 ```
 
