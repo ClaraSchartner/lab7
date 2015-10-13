@@ -67,8 +67,8 @@ ridge$sort<-function (x) x[order(-x$lambda), ]
 ridge$label<-"Ridge"
 fitControl <- trainControl(
   method = "repeatedcv",
-  number = 10,
-  repeats = 3)
+  number = 2,
+  repeats = 2)
 #####----######
 #fit a ridge regresstion 
-train(y=abe$arr_delay, x=abe[,-c(5)], method=ridge, trControl = fitControl)
+train(y=abe$arr_delay, x=abe[,-5], method=ridge, trControl = fitControl)
