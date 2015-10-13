@@ -86,13 +86,15 @@ lines(pre.fore)
  
 tenfoldcross <- trainControl(method = "repeatedcv", repeats=10)
 
-#tried to include custom models in caret -- not working yet
-ridgereg <- list(type=c("Classification","Regression"), library="lab7", loop=NULL)
+#include custom method "ridgereg"
+ridgereg <- list(type=c("Classification","Regression"), 
+                 library="lab7",
+                 loop=NULL)
 
 #the parameter element
-prm <- data.frame(parameter=c("formula","data","lamdba"),class=c("formula","data.frame","numeric"))
-
-ridge<-NULL #Not sure, if you wanted this, but ridge has to be defined somewere
+prm <- data.frame(parameter="lambda",
+                  class="numeric",
+                  label="lambda")
 ridge$parameters <- prm
 
 #the grid element
