@@ -41,6 +41,7 @@ print(result)
 library(mlbench)
 library(caret)
 data("BostonHousing")
+BostonHousing$chas <- as.numeric(BostonHousing$chas)-1 ##CHECK!!
 intrain<-createDataPartition(BostonHousing$crim, p=0.75, list=FALSE)
 training<-BostonHousing[intrain,]
 testing<-BostonHousing[-intrain,]
@@ -78,41 +79,55 @@ plot(testing$crim,col="red")
 # confusionMatrix(data=pre.lm, testing$crim)
 
 #evaluate performance of linear regression model with forward selection on test dataset
-pre.fore<-predict(newdata=testing, lm.fore)
-# confusionMatrix(data=pre.fore, testing$crim) #not working!! maybe because metric?
+#pre.fore<-predict(newdata=testing, lm.fore) #i dont think this should be like this, see below
+
 plot(testing$crim,col="red",type="l")
 lines(pre.fore)
 
  
 tenfoldcross <- trainControl(method = "repeatedcv", repeats=10)
 
-#include custom method "ridgereg"
-ridgereg <- list(type=c("Classification","Regression"), 
+
+
+
+
+
+#include custom method "ridge" #changed the name 
+ridge <- list(type=c("Regression"), 
                  library="lab7",
                  loop=NULL)
 
 #the parameter element
-prm <- data.frame(parameter="lambda",
+ridge$parameters <- data.frame(parameter="lambda",
                   class="numeric",
                   label="lambda")
-ridge$parameters <- prm
+
 
 #the grid element
-ridge.grid <- function(x,y, len=NULL){
-    library(lab7)
+ridge$grid <- function(x,y, len=NULL){
+   data.frame(lambda=c(0,1,3,10))
     
 }
-ridgereg$grid <- ridge.grid
+#ridge$grid <- ridge.grid
 
 #the fit element
-ridge.fit <- function(x, y, wts, param, lev, last, weights, classProbs, ...){
-    ridgereg(x=x, y=y)
+Fit <- function(y, x, lambda, wts, param, lev, last, classProbs, ...){
+  library(lab7)
+    ridgereg(y=y, x=x, lambda=param$lambda) 
 }
-ridgereg$fit <- ridge.fit
+ridge$fit <- Fit
+ridge$prob<-list(NULL)
 
+ridge$predict<-function(modelFit, newdata,preProc=NULL, submodels=NULL){
+  predict(modelFit, newdata)
+}
 
+fitControl <- trainControl(
+  method = "repeatedcv",
+  number = 2,
+  repeats = 1)
 #fit a ridge regresstion 
-ridge.train <- train(crim~., data=training, method=ridgereg, trControl = tenfoldcross)
+ridge.train <- train(training$crim, training[,-1], method=ridge, trControl = fitControl)
               
 ```
 

@@ -18,15 +18,18 @@
 #'ridereg(eruptions~waiting, data=faithful)
 #'
 
-ridgereg <- function(formula, data, lambda=0.1){ #later try to find best lambda!! just temporary solution!
-    X <- model.matrix(formula, data)
-    y <- as.matrix(data[all.vars(formula)[!(all.vars(formula) %in% colnames(X))]])
-    stopifnot(is.numeric(y)&is.numeric(X))
+ridgereg <- function(y, x, lambda=0.1){ #later try to find best lambda!! just temporary solution!
+   # X <- model.matrix(formula, data)
+    #y <- as.matrix(data[all.vars(formula)[!(all.vars(formula) %in% colnames(X))]])
+   # stopifnot(is.numeric(y)&is.numeric(X))
      library(som)
-   xnorm<- normalize(X, byrow=TRUE)
+  # xnorm<- normalize(X, byrow=TRUE)
    # xnorm <- as.matrix(t(t(X)-apply(X,2,mean)))#/diag(var(X)) #how do you think we have to devide my variance?
-   xmean<-as.matrix(t(t(X)-apply(X,2,mean)))
-   xnorm<-xmean/apply(xmean, 2, sd)
+  # xmean<-as.matrix(t(t(X)-apply(X,2,mean)))
+   #xnorm<-xmean/apply(xmean, 2, sd)
+  xnorm<-as.matrix(x)
+  X<-as.matrix(x)
+  y<-as.numeric(y)
     I <- matrix(0,nrow=ncol(X),ncol=ncol(X))
     diag(I) <- 1
     ans <- solve(t(xnorm)%*%xnorm+lambda*I)%*%(t(xnorm)%*%y)
