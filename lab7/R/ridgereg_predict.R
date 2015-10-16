@@ -14,11 +14,8 @@ predict.ridgereg <- function(x, newdata=NULL){
     }
   else{ 
     newdata <- as.matrix(newdata)
-    cf<-x$coefficients
-    if (length(x$coefficients)!=ncol(newdata)){
-      cf<-c(1,cf)
-    }
-  fit <- newdata %*% cf
+   
+  fit <- newdata %*% x$coefficients
 return(as.vector(fit))
 
   }
