@@ -14,6 +14,7 @@ predict.ridgereg <- function(x, newdata=NULL){
     }
   else{ 
     newdata <- as.matrix(newdata)
+   
   fit <- newdata %*% x$coefficients
 return(as.vector(fit))
 

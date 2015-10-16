@@ -9,9 +9,9 @@ ridgereg1(y, x, lambda = 0.1)
 \arguments{
 \item{lambda}{an optional parameter which is a scalar of ridge constant. The default value is set to 0.1.}
 
-\item{formula}{a symbolic description of the model to be fitted.}
+\item{Y}{is the matrix of dependent variable}
 
-\item{waiting}{an optional data frame or list containing the variables in the model.}
+\item{X}{independent variable}
 }
 \value{
 Returns an object of class \code{"ridgereg"}
@@ -24,6 +24,7 @@ Followings are object of class \code{"ridgereg"}:
 }
 \description{
 It is one type of regression using to reduce multicollinearity amongst regression predictor variables in a model.
+Rigreg1 does not take a formula but two matrizes.
 }
 \examples{
 ridereg(eruptions~waiting, data=faithful)
