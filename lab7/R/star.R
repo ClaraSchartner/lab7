@@ -15,6 +15,11 @@ rel %>% filter(complete.cases(.))
 
 abe<-filter(rel,complete.cases(rel))
 library(caret)
+#since 80% of the data is too much to handle apparently, i am scaling it down to 50% of it.
+ind<-createDataPartition(abe$arr_delay, p=c(0.5), list=FALSE)
+temp<-dim(abe)[1]
+temp1<-c(1:temp) %in%  ind  #checking if index in to get TRUE FALSE and put them into filter #optimize
+abe<-filter(abe, temp1)
 ind<-createDataPartition(abe$arr_delay, p=c(0.8), list=FALSE)
 temp<-dim(abe)[1]
 temp1<-c(1:temp) %in%  ind  #checking if index in to get TRUE FALSE and put them into filter #optimize
@@ -39,7 +44,11 @@ fitControl <- trainControl(
   repeats = 10)
 
 ridge$grid <- function(y,x, len=NULL, search="grid"){
-  data.frame(lambda=c(0.01,1,50,70,100,1000))
+  data.frame(lambda=c(0.001,0.5,5,30,70,400))
 }
 
 train(y=training$arr_delay, x=training[,-5], method=ridge, trControl = fitControl)
+model<-ridgereg1(validation$arr_delay, x=validation[,-5], lambda=1)
+#There seems to be no good value for lambda, since all the results are the same.
+#Therefore value 1 is chosen.
+head(predict(model, test))
