@@ -36,98 +36,84 @@ And the function `print` prints both the formula used and the coefficients.
 print(result)
 ```
 
-##Predictive
+##Predictive model using caret library
+Load the `BostonHousing` data found in the `library(mlbenchthe)` and divide the dataset into two part, training and testing dataset. Traning dataset has 75% of the original data while testing dataset has 25%.
 ```{r}
-library(mlbench)
 library(caret)
+library(mlbench)
 data("BostonHousing")
 BostonHousing$chas <- as.numeric(BostonHousing$chas)-1 ##CHECK!!
 intrain<-createDataPartition(BostonHousing$crim, p=0.75, list=FALSE)
 training<-BostonHousing[intrain,]
 testing<-BostonHousing[-intrain,]
+```
 
-#testing2 <- train(crim~.,data=testing)
-
-
-#fit a linear regression model 
+Fit a linear regression model on the training dataset.
+```{r}
 lm.s<-train(crim ~ .,data = training, method = "lm")
+```
 
-
-#fit a linear regression model with forward selection
+Fit a linear regression model with forward selection on the training dataset as well.
+```{r}
 lm.fore<-train(crim ~ .,data = training, method = "leapForward")
+```
 
+```{r}
 pre.fore<-predict(newdata=testing, lm.fore)
-#confusionMatrix(data=pre.fore, testing$crim) #not working!! maybe because metric?
- plot(testing$crim,col="red")
- lines(pre.fore)
-
-
- 
-#evaluate performance of linear regression model on training dataset
-pre.lm.train <- predict(lm.s, newdata=training)
-
-#evaluate performance of linear regression model on test dataset
-pre.lm<-predict(newdata=testing, lm.s)
-
-#confusionMatrix(data=pre.lm, testing$crim)
 plot(testing$crim,col="red")
- lines(pre.lm)
- 
- 
- #10foldcross <- trainControl(method = "repeatedcv", repeats=1)
-
-# confusionMatrix(data=pre.lm, testing$crim)
-
-#evaluate performance of linear regression model with forward selection on test dataset
-#pre.fore<-predict(newdata=testing, lm.fore) #i dont think this should be like this, see below
-
-plot(testing$crim,col="red",type="l")
 lines(pre.fore)
+```
 
- 
-#tenfoldcross <- trainControl(method = "repeatedcv", repeats=10)
+```{r} 
+# #evaluate performance of linear regression model on training dataset
+# pre.lm.train <- predict(lm.s, newdata=training)
+# 
+# #evaluate performance of linear regression model on test dataset
+# pre.lm<-predict(newdata=testing, lm.s)
+
+# evaluate performance of linear regression model with forward selection on test dataset
+# pre.fore<-predict(newdata=testing, lm.fore) #i dont think this should be like this, see below
+# 
+# plot(testing$crim,col="red",type="l")
+# lines(pre.fore)
+# 
+#  
+# tenfoldcross <- trainControl(method = "repeatedcv", repeats=10)
+``` 
 
 
-
-
-
-
-
-
-#include custom method "ridge" #changed the name 
+Include the custom method for "ridge regression"
+```{r}
 ridge <- list(type=c("Regression"), 
                  library="lab7",
                  loop=NULL)
 
-#the parameter element
 ridge$parameters <- data.frame(parameter="lambda",
                   class="numeric",
                   label="lambda")
 
-
-#the grid element
 ridge$grid <- function(y,x, len=NULL, search="grid"){
  data.frame(lambda=c(0.01,0.5,1,3,8,30))
 }
 
-#ridge$grid <- ridge.grid
-
-#the fit element
 Fit <- function(y, x, lambda, param, lev, last, classProbs, ...){
-  #library(lab7)
    lab7::ridgereg1(y=y, x=x, lambda=param$lambda) 
 }
-
 ridge$fit <- Fit
+
 ridge$prob<-list(NULL)
 
 ridge$predict<-function(modelFit, newdata,preProc=NULL, submodels=NULL){
   predict(modelFit, newdata)
 }
 
-
 ridge$sort<-function (x) x[order(-x$lambda), ]
+
 ridge$label<-"Ridge"
+``` 
+
+Fit a ridge regression for the training dataset.
+```{r}
 fitControl <- trainControl(
   method = "repeatedcv",
   number = 2,
