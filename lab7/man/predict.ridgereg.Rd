@@ -4,7 +4,7 @@
 \alias{predict.ridgereg}
 \title{Predict method for Ridge regression model}
 \usage{
-\method{predict}{ridgereg}(x, ...)
+\method{predict}{ridgereg}(x, newdata = NULL)
 }
 \arguments{
 \item{x}{an object of class.}
