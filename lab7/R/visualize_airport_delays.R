@@ -2,6 +2,7 @@ visualize_airport_delays <- function(){
     library(dplyr)
     library(tidyr)
     library(ggplot2)
+  library(ggmap)
     library(nycflights13)
     data("flights")
     data("airports")
@@ -16,9 +17,15 @@ visualize_airport_delays <- function(){
     
     data <- inner_join(subset_a,delay,by="name")
     
+ 
+ 
+    
     graph <- ggplot(data=data, aes(x=lon,y=lat))+geom_point(aes(color=m_delay))+
-        xlab("Longitude")+ylab("Latitude")+ggtitle("The mean delay of flights for different airports")+
-        scale_color_gradient(low="blue", high="red")
+      xlab("Longitude")+ylab("Latitude")+ggtitle("The mean delay of flights for different airports")+
+      scale_color_gradient(low="blue", high="red")
     
     return(graph)
+    
+    
+   
 }
