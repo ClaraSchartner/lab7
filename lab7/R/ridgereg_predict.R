@@ -8,6 +8,7 @@
 #'@return produce a vector of predictions.
 #'
 
+<<<<<<< HEAD
 predict.ridgereg <- function(x, x_values = "default"){
   if(identical(x_values, "default")){
     # predict the same data the model was created on:
@@ -30,3 +31,8 @@ predict.ridgereg <- function(x, x_values = "default"){
   
 }
 
+=======
+predict.ridgereg <- function(x, ...){
+    return(x$fitted)
+}
+>>>>>>> 45e83badb03fd6c7058ccc83db3136696dc111fc
