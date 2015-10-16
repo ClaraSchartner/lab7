@@ -116,10 +116,10 @@ Fit a ridge regression for the training dataset.
 ```{r}
 fitControl <- trainControl(
   method = "repeatedcv",
-  number = 2,
-  repeats = 2)
+  number = 10,
+  repeats = 10)
 #fit a ridge regresstion 
-#ridgeTrain <- train(y=training$crim, x=training[,-1], method=ridge, trControl = fitControl)
+ridgeTrain <- train(y=training$crim, x=training[,-1], method=ridge, trControl = fitControl)
 #ridgeTrain              
 ```
 
