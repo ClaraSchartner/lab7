@@ -20,8 +20,11 @@ temp<-dim(abe)[1]
 temp1<-c(1:temp) %in%  ind  #checking if index in to get TRUE FALSE and put them into filter #optimize
 training<-filter(abe, temp1)
 valtest<-filter(abe, !temp1)
-
-
+ind<-createDataPartition(valtest$arr_delay, p=c(0.25), list=FALSE) #5% of whole dataset is 25% of the 20%
+temp<-dim(valtest)[1]
+temp1<-c(1:temp) %in%  ind 
+test<-filter(valtest, temp1)
+validation<-filter(valtest, !temp1)
 #
 #ridgereg(abe$arr_delay~, abe)
 #r<-ridgereg(arr_delay~dep_time+distance+air_time+temp+dewp+humid+wind_speed+pressure, abe)
