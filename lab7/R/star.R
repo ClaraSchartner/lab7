@@ -51,4 +51,7 @@ train(y=training$arr_delay, x=training[,-5], method=ridge, trControl = fitContro
 model<-ridgereg1(validation$arr_delay, x=validation[,-5], lambda=1)
 #There seems to be no good value for lambda, since all the results are the same.
 #Therefore value 1 is chosen.
-head(predict(model, test))
+f<-predict(model, test[,-5])
+hist(as.numeric(test[,5]))
+plot(test[,5]-f)
+hist(as.vector(as.matrix(test[,5]-f)))
