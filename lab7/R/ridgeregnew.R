@@ -2,7 +2,6 @@ ridgereg <- function(formula, data, lambda=0.1){
   X <- model.matrix(formula, data)
   y <- as.matrix(data[all.vars(formula)[!(all.vars(formula) %in% colnames(X))]])
   stopifnot(is.numeric(y)&is.numeric(X))
-  
   I<-matrix(0,nrow=ncol(X),ncol=ncol(X))
   diag(I)<-1
   ans<-solve(t(X)%*%X+lambda*I)%*%(t(X)%*%y)
