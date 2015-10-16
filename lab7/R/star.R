@@ -26,52 +26,20 @@ temp1<-c(1:temp) %in%  ind
 test<-filter(valtest, temp1)
 validation<-filter(valtest, !temp1)
 #
-#ridgereg(abe$arr_delay~, abe)
-#r<-ridgereg(arr_delay~dep_time+distance+air_time+temp+dewp+humid+wind_speed+pressure, abe)
-#coef(r)
 
 
 
 
-####-------------##-----------------------####
 
-ridge <- list(type=c("Regression"), 
-              library="lab7",
-              loop=NULL)
-
-#the parameter element
-ridge$parameters <- data.frame(parameter="lambda",
-                               class="numeric",
-                               label="lambda")
-
-
-#the grid element
-ridge$grid <- function(y,x, len=NULL, search="grid"){
-  data.frame(lambda=c(1,3,10,11,15,30,50,60,70))
-}
-
-#ridge$grid <- ridge.grid
-
-#the fit element
-Fit <- function(y, x, lambda, param, lev, last, classProbs, ...){
-  #library(lab7)
-  ridgereg1(y=y, x=x, lambda=param$lambda) 
-}
-
-ridge$fit <- Fit
-ridge$prob<-list(NULL)
-
-ridge$predict<-function(modelFit, newdata,preProc=NULL, submodels=NULL){
-  predict(modelFit, newdata)
-}
-
-
-ridge$sort<-function (x) x[order(-x$lambda), ]
-ridge$label<-"Ridge"
-fitControl <- trainControl(
-  method = "repeatedcv",
-  number = 2,
-  repeats = 2)
 #####----######
 #fit a ridge regresstion 
-#train(y=abe$arr_delay, x=abe[,-5], method=ridge, trControl = fitControl)
+fitControl <- trainControl(
+  method = "repeatedcv",
+  number = 10,
+  repeats = 10)
+
+ridge$grid <- function(y,x, len=NULL, search="grid"){
+  data.frame(lambda=c(0.01,1,50,70,100,1000))
+}
+
+train(y=training$arr_delay, x=training[,-5], method=ridge, trControl = fitControl)
