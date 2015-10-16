@@ -133,7 +133,7 @@ fitControl <- trainControl(
   number = 2,
   repeats = 2)
 #fit a ridge regresstion 
-ridgeTrain <- train(y=training$crim, x=training[,-1], method=ridge, trControl = fitControl)
+#ridgeTrain <- train(y=training$crim, x=training[,-1], method=ridge, trControl = fitControl)
 #ridgeTrain              
 ```
 

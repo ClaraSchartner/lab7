@@ -71,4 +71,4 @@ fitControl <- trainControl(
   repeats = 2)
 #####----######
 #fit a ridge regresstion 
-train(y=abe$arr_delay, x=abe[,-5], method=ridge, trControl = fitControl)
+#train(y=abe$arr_delay, x=abe[,-5], method=ridge, trControl = fitControl)
