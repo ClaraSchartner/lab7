@@ -48,42 +48,37 @@ training<-BostonHousing[intrain,]
 testing<-BostonHousing[-intrain,]
 ```
 
-Fit a linear regression model on the training dataset.
+The first step is to fit a linear regression model on the training dataset.
 ```{r}
-lm.s<-train(crim ~ .,data = training, method = "lm")
+set.seed(3245)
+lm<-train(crim ~ .,data = training, method = "lm")
+lm
 ```
 
-Fit a linear regression model with forward selection on the training dataset as well.
+Then, using a different method which is a linear regression model with forward selection to fit the training dataset.
 ```{r}
-lm.fore<-train(crim ~ .,data = training, method = "leapForward")
+set.seed(3245)
+lm.forward<-train(crim ~ .,data = training, method = "leapForward")
+lm.forward
 ```
 
+From this two model, `lm` and `lm.forward`,we can see that using a linear regression model, or `lm`, to fit the dataset is slightly better as it gives a smaller RMSE.
+
+Moreover, it shows that a linear regression model with forward selection, or `lm.forward`, has the optimal value when using 2 parameters.
+
 ```{r}
-pre.fore<-predict(newdata=testing, lm.fore)
-plot(testing$crim,col="red")
-lines(pre.fore)
+# pre.forward<-predict(newdata=training, lm.forward)
+# plot(training$crim,col="red")
+# lines(pre.forward)
 ```
 
-```{r} 
-# #evaluate performance of linear regression model on training dataset
-# pre.lm.train <- predict(lm.s, newdata=training)
-# 
-# #evaluate performance of linear regression model on test dataset
-# pre.lm<-predict(newdata=testing, lm.s)
-
-# evaluate performance of linear regression model with forward selection on test dataset
-# pre.fore<-predict(newdata=testing, lm.fore) #i dont think this should be like this, see below
-# 
-# plot(testing$crim,col="red",type="l")
-# lines(pre.fore)
-# 
-#  
-# tenfoldcross <- trainControl(method = "repeatedcv", repeats=10)
-``` 
-
-
+<<<<<<< HEAD:lab7/vignettes/ridgereg.Rmd
 Include the custom method for "ridge regression"
 ```{r, eval=FALSE}
+=======
+Next step is to include the custom method which is "ridge regression" into the caret package.
+```{r}
+>>>>>>> 6d638e43ae09ea8adfba650d6b94840a18d94c47:lab7/vignettes/ridgereg.Rmd
 ridge <- list(type=c("Regression"), 
                  library="lab7",
                  loop=NULL)
@@ -96,10 +91,9 @@ ridge$grid <- function(y,x, len=NULL, search="grid"){
  data.frame(lambda=c(0.01,0.5,1,3,8,30))
 }
 
-Fit <- function(y, x, lambda, param, lev, last, classProbs, ...){
+ridge$fit <- function(y, x, lambda, param, lev, last, classProbs, ...){
    lab7::ridgereg1(y=y, x=x, lambda=param$lambda) 
 }
-ridge$fit <- Fit
 
 ridge$prob<-list(NULL)
 
@@ -112,14 +106,31 @@ ridge$sort<-function (x) x[order(-x$lambda), ]
 ridge$label<-"Ridge"
 ``` 
 
-Fit a ridge regression for the training dataset.
+Now, we can fit a ridge regression for this training dataset.
 ```{r}
 fitControl <- trainControl(
   method = "repeatedcv",
   number = 10,
   repeats = 10)
-#fit a ridge regresstion 
-ridgeTrain <- train(y=training$crim, x=training[,-1], method=ridge, trControl = fitControl)
-#ridgeTrain              
+
+set.seed(3245)
+lm.ridge <- train(y=training$crim, x=training[,-1], method=ridge, trControl = fitControl)
+lm.ridge            
+```
+We can tell from looking at this result that the lambda which gives the smallest RMSE is 30.
+
+
+Finally, evaluate the models on the test dataset. Following are the results:
+```{r}
+set.seed(3245)
+lm.test <- train(crim ~ .,data = testing, method = "lm")
+lm.test
+
+lm.forward.test <- train(crim ~ .,data = testing, method = "leapForward")
+lm.forward.test
+
+lm.ridge.test <- train(y=testing$crim, x=testing[,-1], method=ridge, trControl = fitControl)
+lm.ridge.test
 ```
 
+This result shows that when fitting the three models, `lm.test`, `lm.forward.test`, and `lm.ridge.test`, with the test dataset, the ridge regression model gives us the best result. The ridge regression with the best hyperparameter value, lambda is 30, has the smallest RMSE.
