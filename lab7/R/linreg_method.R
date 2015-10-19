@@ -52,3 +52,16 @@ summary.linreg <- function(x, ...){
     sd_res <- sqrt(x$varres)
     cat(sd_res, "on", x$df, "degree of freedom")
 }
+
+predict.ridgereg <- function(x, newdata=NULL){
+  if(is.null(newdata)){
+    x$fitted
+  }
+  else{ 
+    newdata <- as.matrix(newdata)
+    
+    fit <- newdata %*% x$coefficients
+    return(as.vector(fit))
+    
+  }
+}

@@ -83,7 +83,7 @@ lines(pre.fore)
 
 
 Include the custom method for "ridge regression"
-```{r}
+```{r, eval=FALSE}
 ridge <- list(type=c("Regression"), 
                  library="lab7",
                  loop=NULL)
