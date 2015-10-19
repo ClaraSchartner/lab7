@@ -99,30 +99,52 @@ BostonHousing$chas &lt;-<span class="st"> </span><span class="kw">as.numeric</sp
 intrain&lt;-<span class="kw">createDataPartition</span>(BostonHousing$crim, <span class="dt">p=</span><span class="fl">0.75</span>, <span class="dt">list=</span><span class="ot">FALSE</span>)
 training&lt;-BostonHousing[intrain,]
 testing&lt;-BostonHousing[-intrain,]</code></pre>
-<p>Fit a linear regression model on the training dataset.</p>
-<pre class="sourceCode r"><code class="sourceCode r">lm.s&lt;-<span class="kw">train</span>(crim ~<span class="st"> </span>.,<span class="dt">data =</span> training, <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre>
-<p>Fit a linear regression model with forward selection on the training dataset as well.</p>
-<pre class="sourceCode r"><code class="sourceCode r">lm.fore&lt;-<span class="kw">train</span>(crim ~<span class="st"> </span>.,<span class="dt">data =</span> training, <span class="dt">method =</span> <span class="st">&quot;leapForward&quot;</span>)</code></pre>
+<p>The first step is to fit a linear regression model on the training dataset.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">3245</span>)
+lm&lt;-<span class="kw">train</span>(crim ~<span class="st"> </span>.,<span class="dt">data =</span> training, <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)
+lm</code></pre>
+<pre><code>## Linear Regression 
+## 
+## 382 samples
+##  13 predictor
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 382, 382, 382, 382, 382, 382, ... 
+## Resampling results
+## 
+##   RMSE      Rsquared   RMSE SD   Rsquared SD
+##   7.357237  0.4313459  1.957751  0.1204801  
+## 
+## </code></pre>
+<p>Then, using a different method which is a linear regression model with forward selection to fit the training dataset.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">3245</span>)
+lm.forward&lt;-<span class="kw">train</span>(crim ~<span class="st"> </span>.,<span class="dt">data =</span> training, <span class="dt">method =</span> <span class="st">&quot;leapForward&quot;</span>)</code></pre>
 <pre><code>## Lade nötiges Paket: leaps</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">pre.fore&lt;-<span class="kw">predict</span>(<span class="dt">newdata=</span>testing, lm.fore)
-<span class="kw">plot</span>(testing$crim,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">lines</span>(pre.fore)</code></pre>
-<p><img src="data:image/png;base64,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" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># #evaluate performance of linear regression model on training dataset</span>
-<span class="co"># pre.lm.train &lt;- predict(lm.s, newdata=training)</span>
-<span class="co"># </span>
-<span class="co"># #evaluate performance of linear regression model on test dataset</span>
-<span class="co"># pre.lm&lt;-predict(newdata=testing, lm.s)</span>
-
-<span class="co"># evaluate performance of linear regression model with forward selection on test dataset</span>
-<span class="co"># pre.fore&lt;-predict(newdata=testing, lm.fore) #i dont think this should be like this, see below</span>
-<span class="co"># </span>
-<span class="co"># plot(testing$crim,col=&quot;red&quot;,type=&quot;l&quot;)</span>
-<span class="co"># lines(pre.fore)</span>
-<span class="co"># </span>
-<span class="co">#  </span>
-<span class="co"># tenfoldcross &lt;- trainControl(method = &quot;repeatedcv&quot;, repeats=10)</span></code></pre>
-<p>Include the custom method for “ridge regression”</p>
+<pre class="sourceCode r"><code class="sourceCode r">lm.forward</code></pre>
+<pre><code>## Linear Regression with Forward Selection 
+## 
+## 382 samples
+##  13 predictor
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 382, 382, 382, 382, 382, 382, ... 
+## Resampling results across tuning parameters:
+## 
+##   nvmax  RMSE      Rsquared   RMSE SD   Rsquared SD
+##   2      7.369008  0.4225566  2.046902  0.1274502  
+##   3      7.379373  0.4219193  2.017779  0.1229588  
+##   4      7.380401  0.4226003  2.016916  0.1233698  
+## 
+## RMSE was used to select the optimal model using  the smallest value.
+## The final value used for the model was nvmax = 2.</code></pre>
+<p>From this two model, <code>lm</code> and <code>lm.forward</code>,we can see that using a linear regression model, or <code>lm</code>, to fit the dataset is slightly better as it gives a smaller RMSE.</p>
+<p>Moreover, it shows that a linear regression model with forward selection, or <code>lm.forward</code>, has the optimal value when using 2 parameters.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># pre.forward&lt;-predict(newdata=training, lm.forward)</span>
+<span class="co"># plot(training$crim,col=&quot;red&quot;)</span>
+<span class="co"># lines(pre.forward)</span></code></pre>
+<p>Next step is to include the custom method which is “ridge regression” into the caret package.</p>
 <pre class="sourceCode r"><code class="sourceCode r">ridge &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">type=</span><span class="kw">c</span>(<span class="st">&quot;Regression&quot;</span>), 
                  <span class="dt">library=</span><span class="st">&quot;lab7&quot;</span>,
                  <span class="dt">loop=</span><span class="ot">NULL</span>)
@@ -135,10 +157,9 @@ ridge$grid &lt;-<span class="st"> </span>function(y,x, <span class="dt">len=</sp
  <span class="kw">data.frame</span>(<span class="dt">lambda=</span><span class="kw">c</span>(<span class="fl">0.01</span>,<span class="fl">0.5</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">30</span>))
 }
 
-Fit &lt;-<span class="st"> </span>function(y, x, lambda, param, lev, last, classProbs, ...){
+ridge$fit &lt;-<span class="st"> </span>function(y, x, lambda, param, lev, last, classProbs, ...){
    lab7::<span class="kw">ridgereg1</span>(<span class="dt">y=</span>y, <span class="dt">x=</span>x, <span class="dt">lambda=</span>param$lambda) 
 }
-ridge$fit &lt;-<span class="st"> </span>Fit
 
 ridge$prob&lt;-<span class="kw">list</span>(<span class="ot">NULL</span>)
 
@@ -149,14 +170,96 @@ ridge$predict&lt;-function(modelFit, newdata,<span class="dt">preProc=</span><sp
 ridge$sort&lt;-function (x) x[<span class="kw">order</span>(-x$lambda), ]
 
 ridge$label&lt;-<span class="st">&quot;Ridge&quot;</span></code></pre>
-<p>Fit a ridge regression for the training dataset.</p>
+<p>Now, we can fit a ridge regression for this training dataset.</p>
 <pre class="sourceCode r"><code class="sourceCode r">fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(
   <span class="dt">method =</span> <span class="st">&quot;repeatedcv&quot;</span>,
   <span class="dt">number =</span> <span class="dv">10</span>,
   <span class="dt">repeats =</span> <span class="dv">10</span>)
-<span class="co">#fit a ridge regresstion </span>
-ridgeTrain &lt;-<span class="st"> </span><span class="kw">train</span>(<span class="dt">y=</span>training$crim, <span class="dt">x=</span>training[,-<span class="dv">1</span>], <span class="dt">method=</span>ridge, <span class="dt">trControl =</span> fitControl)
-<span class="co">#ridgeTrain              </span></code></pre>
+
+<span class="kw">set.seed</span>(<span class="dv">3245</span>)
+lm.ridge &lt;-<span class="st"> </span><span class="kw">train</span>(<span class="dt">y=</span>training$crim, <span class="dt">x=</span>training[,-<span class="dv">1</span>], <span class="dt">method=</span>ridge, <span class="dt">trControl =</span> fitControl)
+lm.ridge            </code></pre>
+<pre><code>## Ridge 
+## 
+## 382 samples
+##  13 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold, repeated 10 times) 
+## Summary of sample sizes: 343, 345, 344, 345, 343, 346, ... 
+## Resampling results across tuning parameters:
+## 
+##   lambda  RMSE      Rsquared   RMSE SD   Rsquared SD
+##   1e-03   6.344069  0.5758223  3.602768  0.1721887  
+##   5e-01   6.337899  0.5766161  3.608802  0.1728289  
+##   5e+00   6.325569  0.5781598  3.623083  0.1743207  
+##   3e+01   6.300387  0.5815323  3.648259  0.1769855  
+##   7e+01   6.281639  0.5840679  3.668541  0.1791975  
+##   4e+02   6.256949  0.5862690  3.711660  0.1827676  
+## 
+## RMSE was used to select the optimal model using  the smallest value.
+## The final value used for the model was lambda = 400.</code></pre>
+<p>We can tell from looking at this result that the lambda which gives the smallest RMSE is 30.</p>
+<p>Finally, evaluate the models on the test dataset. Following are the results:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">3245</span>)
+lm.test &lt;-<span class="st"> </span><span class="kw">train</span>(crim ~<span class="st"> </span>.,<span class="dt">data =</span> testing, <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)
+lm.test</code></pre>
+<pre><code>## Linear Regression 
+## 
+## 124 samples
+##  13 predictor
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 124, 124, 124, 124, 124, 124, ... 
+## Resampling results
+## 
+##   RMSE      Rsquared   RMSE SD    Rsquared SD
+##   4.038202  0.5724172  0.9355334  0.1103047  
+## 
+## </code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">lm.forward.test &lt;-<span class="st"> </span><span class="kw">train</span>(crim ~<span class="st"> </span>.,<span class="dt">data =</span> testing, <span class="dt">method =</span> <span class="st">&quot;leapForward&quot;</span>)
+lm.forward.test</code></pre>
+<pre><code>## Linear Regression with Forward Selection 
+## 
+## 124 samples
+##  13 predictor
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 124, 124, 124, 124, 124, 124, ... 
+## Resampling results across tuning parameters:
+## 
+##   nvmax  RMSE      Rsquared   RMSE SD   Rsquared SD
+##   2      4.379888  0.5338787  1.138573  0.1277908  
+##   3      4.369608  0.5364374  1.134358  0.1224062  
+##   4      4.434249  0.5248151  1.124006  0.1247492  
+## 
+## RMSE was used to select the optimal model using  the smallest value.
+## The final value used for the model was nvmax = 3.</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">lm.ridge.test &lt;-<span class="st"> </span><span class="kw">train</span>(<span class="dt">y=</span>testing$crim, <span class="dt">x=</span>testing[,-<span class="dv">1</span>], <span class="dt">method=</span>ridge, <span class="dt">trControl =</span> fitControl)
+lm.ridge.test</code></pre>
+<pre><code>## Ridge 
+## 
+## 124 samples
+##  13 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold, repeated 10 times) 
+## Summary of sample sizes: 111, 112, 112, 112, 112, 112, ... 
+## Resampling results across tuning parameters:
+## 
+##   lambda  RMSE      Rsquared   RMSE SD   Rsquared SD
+##   1e-03   3.635149  0.7364990  1.981119  0.1492026  
+##   5e-01   3.606367  0.7404771  1.985204  0.1465165  
+##   5e+00   3.583996  0.7431323  1.983908  0.1443045  
+##   3e+01   3.548088  0.7472046  1.977176  0.1418460  
+##   7e+01   3.524726  0.7496966  1.973079  0.1404285  
+##   4e+02   3.486704  0.7521016  1.961957  0.1371996  
+## 
+## RMSE was used to select the optimal model using  the smallest value.
+## The final value used for the model was lambda = 400.</code></pre>
+<p>This result shows that when fitting the three models, <code>lm.test</code>, <code>lm.forward.test</code>, and <code>lm.ridge.test</code>, with the test dataset, the ridge regression model gives us the best result. The ridge regression with the best hyperparameter value, lambda is 30, has the smallest RMSE.</p>
 </div>
 
 
