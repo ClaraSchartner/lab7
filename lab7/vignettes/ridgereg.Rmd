@@ -72,13 +72,10 @@ Moreover, it shows that a linear regression model with forward selection, or `lm
 # lines(pre.forward)
 ```
 
-<<<<<<< HEAD:lab7/vignettes/ridgereg.Rmd
-Include the custom method for "ridge regression"
-```{r, eval=FALSE}
-=======
+
 Next step is to include the custom method which is "ridge regression" into the caret package.
-```{r}
->>>>>>> 6d638e43ae09ea8adfba650d6b94840a18d94c47:lab7/vignettes/ridgereg.Rmd
+```{r, eval=FALSE}
+
 ridge <- list(type=c("Regression"), 
                  library="lab7",
                  loop=NULL)
